@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mailing_service',
 ]
 
 MIDDLEWARE = [
@@ -115,3 +116,48 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Custom User Model
+AUTH_USER_MODEL = 'users.User'
+
+# Authentication URLs
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'mailings:home'
+LOGOUT_REDIRECT_URL = 'users:login'
+
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Для разработки
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Для продакшена
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@gmail.com'
+EMAIL_HOST_PASSWORD = 'your-app-password'
+DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
+
+
+# Caching settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5 минут
+    }
+}
+
+# Cache timeout for views (in seconds)
+CACHE_TIMEOUT_SHORT = 300  # 5 минут
+CACHE_TIMEOUT_MEDIUM = 900  # 15 минут
+CACHE_TIMEOUT_LONG = 3600  # 1 час
