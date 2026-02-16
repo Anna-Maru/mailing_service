@@ -1,0 +1,84 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Редактирование профиля</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Имя</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Фамилия</label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Телефон</label>
+                        {{ form.phone }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Аватар</label>
+                        {{ form.avatar }}
+                        {% if user.avatar %}
+                            <div class="mt-2">
+                                <img src="{{ user.avatar.url }}" alt="Avatar" style="max-width: 200px;">
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Информация</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+                <p><strong>Роль:</strong> {{ user.get_role_display }}</p>
+                <p><strong>Email подтвержден:</strong> 
+                    {% if user.is_email_verified %}
+                        <span class="badge bg-success">Да</span>
+                    {% else %}
+                        <span class="badge bg-warning">Нет</span>
+                    {% endif %}
+                </p>
+                <p><strong>Дата регистрации:</strong> {{ user.date_joined|date:"d.m.Y" }}</p>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>Быстрая статистика</h5>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'mailings:user_statistics' %}" class="btn btn-primary w-100">
+                    Посмотреть полную статистику
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
