@@ -128,10 +128,13 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 class ManagerRequiredMixin(UserPassesTestMixin):
     """Mixin для проверки прав менеджера"""
 
+    def __init__(self):
+        self.request = None
+
     def test_func(self):
         return (
-                self.request.user.is_authenticated and
-                self.request.user.can_manage_users()
+                self.request.user.is_authenticated
+                and self.request.user.can_manage_users()
         )
 
     def handle_no_permission(self):

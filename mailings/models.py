@@ -151,7 +151,7 @@ class Mailing(models.Model):
             self.status = new_status
             self.save(update_fields=['status'])
 
-    def is_active(self):
+    def is_status_active(self):
         """Проверка, является ли рассылка активной"""
         self.update_status()
         return self.status == self.STATUS_STARTED

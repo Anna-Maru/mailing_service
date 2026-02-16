@@ -4,7 +4,6 @@ from django.views.generic import (ListView, DetailView, CreateView, UpdateView, 
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-from django.db.models import Q, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
@@ -438,7 +437,7 @@ def user_statistics(request):
     if stats['total_attempts'] > 0:
         stats['success_rate'] = round(
             (stats['successful_attempts'] / stats['total_attempts']) * 100, 2
-)
+        )
     else:
         stats['success_rate'] = 0
 
