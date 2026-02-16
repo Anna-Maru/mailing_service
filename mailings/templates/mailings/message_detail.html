@@ -1,0 +1,66 @@
+{% extends 'mailings/base.html' %}
+
+{% block title %}Сообщение: {{ message.subject }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Просмотр сообщения</h3>
+                <div>
+                    <a href="{% url 'mailings:message_update' message.pk %}" class="btn btn-warning btn-sm">Изменить</a>
+                    <a href="{% url 'mailings:message_delete' message.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <h4>{{ message.subject }}</h4>
+                <hr>
+                <div class="message-body">
+                    {{ message.body|linebreaks }}
+                </div>
+                <hr>
+                <p class="text-muted">
+                    <strong>Дата создания:</strong> {{ message.created_at|date:"d.m.Y H:i" }}
+                </p>
+            </div>
+        </div>
+        
+        <div class="mt-3">
+            <a href="{% url 'mailings:message_list' %}" class="btn btn-secondary">← Назад к списку</a>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Рассылки с этим сообщением</h5>
+            </div>
+            <div class="card-body">
+                {% if message.mailings.all %}
+                    <ul class="list-group">
+                        {% for mailing in message.mailings.all %}
+                            <li class="list-group-item">
+                                <a href="{% url 'mailings:mailing_detail' mailing.pk %}">
+                                    Рассылка #{{ mailing.pk }}
+                                </a>
+                                <br>
+                                <small class="text-muted">Статус: {{ mailing.status }}</small>
+                                <br>
+                                <small class="text-muted">
+                                    Начало: {{ mailing.start_time|date:"d.m.Y H:i" }}
+                                </small>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">Это сообщение еще не использовалось в рассылках</p>
+                    <a href="{% url 'mailings:mailing_create' %}" class="btn btn-primary btn-sm">
+                        Создать рассылку
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
